@@ -12,7 +12,7 @@
   </div>
   <div class="distrate">
     <p>{{(dist * 69).toFixed(2)}}mi away from you!</p>
-    <p>Rating: {{'⭐'.repeat(owner.rating)}}</p>
+    <p>Owner Rating: {{'⭐'.repeat(owner.rating)}}</p>
   </div>
 </div>
 </template>

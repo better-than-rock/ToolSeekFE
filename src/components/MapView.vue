@@ -1,6 +1,12 @@
 <template>
 <div id="mapview">
-  <input class="searchBar" type="text" v-model="filter" @input="filterData">
+  <span class="search">
+    <input class="searchBar" type="text" v-model="filter" @input="filterData">
+    <select v-model="sortBy" @change="filterData">
+      <option value="distance">Distance</option>
+      <option value="rating">Rating</option>
+    </select>
+  </span>
   <rent-form @hide="hide" :price="price" v-if="showForm"></rent-form>
   <div class="map">
   </div>
@@ -143,6 +149,7 @@ export default {
       },
     ];
     return {
+      sortBy: 'distance',
       filter: '',
       showForm: false,
       rented: false,
@@ -179,7 +186,11 @@ export default {
       this.filteredTools.splice(0, this.filteredTools.length);
       this.tools.filter(tool => tool.name.match(new RegExp(this.filter, 'i')))
         .forEach(tool => this.filteredTools.push(tool));
-      this.filteredTools.sort((a, b) => distanceFromZip(a) - distanceFromZip(b));
+      if (this.sortBy === 'distance') {
+        this.filteredTools.sort((a, b) => distanceFromZip(a) - distanceFromZip(b));
+      } else {
+        this.filteredTools.sort((a, b) => b.owner.rating - a.owner.rating);
+      }
     },
   },
 };
@@ -206,5 +217,9 @@ div.tool {
 input.searchBar {
   display: flex;
   margin: 0 auto;
+}
+span.search {
+  display: inline-flex;
+  margin: 0 2em;
 }
 </style>
