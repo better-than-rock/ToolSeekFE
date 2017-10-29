@@ -104,6 +104,7 @@ export default {
         owner: {
           name: 'Harold',
           image: harold,
+          rating: 5,
         },
         location: [30.530603, -97.713604],
       },
@@ -114,6 +115,7 @@ export default {
         owner: {
           name: 'Harold',
           image: harold,
+          rating: 5,
         },
         location: [30.540999, -97.703541],
       },
@@ -124,6 +126,7 @@ export default {
         owner: {
           name: 'Lyndon',
           image: asianCW,
+          rating: 4,
         },
         location: [30.535963, -97.708229],
       },
@@ -134,6 +137,7 @@ export default {
         owner: {
           name: 'Cool Mom',
           image: handyman,
+          rating: 2,
         },
         location: [30.533172, -97.715256],
       },
