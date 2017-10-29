@@ -96,10 +96,11 @@ input {
   font-size: 24pt;
   text-align: center;
   height: 1em;
-  width: 15em;
+  width: 10em;
   padding: .5em;
-  border-radius: 3px;
+  border-radius: 5px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  opacity: .8;
 }
 video.background-loop {
   position: absolute;

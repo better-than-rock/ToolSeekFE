@@ -1,34 +1,59 @@
 <template>
   <div class="form">
-    <form class="register-form">
-      <input type="text" placeholder="name"/>
-      <input type="password" placeholder="password"/>
+    <form v-if="register" class="register-form">
+      <input v-model="username" type="text" placeholder="name"/>
+      <input v-model="password" type="password" placeholder="password"/>
       <input type="text" placeholder="email address"/>
-      <button>create</button>
-      <p class="message">Already registered? <a href="#">Sign In</a></p>
+      <button @click.prevent="register">create</button>
+      <p class="message">Already registered? <a @click="toggle" href="#">Sign In</a></p>
     </form>
-    <form class="login-form">
-      <input type="text" placeholder="username"/>
-      <input type="password" placeholder="password"/>
-      <button>login</button>
-      <p class="message">Not registered? <a href="#">Create an account</a></p>
+    <form v-else class="login-form">
+      <input v-model="username" type="text" placeholder="username"/>
+      <input v-model="password" type="password" placeholder="password"/>
+      <button @click.prevent="login">login</button>
+      <p class="message">Not registered? <a @click="toggle" href="#">Create an account</a></p>
     </form>
   </div>
 </template>
 
 
 <script>
-
+export default {
+  name: 'loginform',
+  data() {
+    return {
+      register: false,
+      username: '',
+      password: '',
+    };
+  },
+  methods: {
+    toggle() {
+      this.register = !this.register;
+    },
+    login() {
+      if (this.username === this.password && this.username === 'admin') {
+        this.$store.dispatch('login', 'abc123');
+        this.$emit('login');
+      }
+    },
+  },
+};
 </script>
 
 <style>
-
+form.login-form,
+form.register-form {
+  flex-direction: column;
+}
 .form {
-  position: relative;
-  z-index: 1;
+  border-radius: 10px;
+  position: absolute;
+  top: 5em;
+  right: 2em;
+  z-index: 99999;
   background: #FFFFFF;
   max-width: 360px;
-  margin: 0 auto 100px;
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
@@ -45,6 +70,7 @@
   font-size: 14px;
 }
 .form button {
+  border-radius: 5px;
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;

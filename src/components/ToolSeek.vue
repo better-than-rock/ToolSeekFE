@@ -1,23 +1,52 @@
 <template>
 <div id="toolseek">
-  <h2>Tool Seek</h2>
+  <h2><a @click="home" href="#">Tool Seek</a></h2>
   <span class="useability">
-    <span class="login"><a>Log In</a></span>
-    <span class="profile"><i class="fa fa-user-circle fa-2x"></i></span>
+    <span v-if="!loginToken" class="login"><a @click="popupLogin" href="#">Log In</a></span>
+    <span v-else class="profile"><i class="fa fa-user-circle fa-2x"></i></span>
   </span>
+  <login-form v-if="showForm" @login="popupLogin"></login-form>
 </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import LoginForm from '@/components/LoginForm';
+
 export default {
   name: 'toolseek',
+  components: {
+    LoginForm,
+  },
   data() {
-    return {};
+    return {
+      showForm: false,
+    };
+  },
+  computed: {
+    ...mapGetters(['loginToken']),
+  },
+  methods: {
+    popupLogin() {
+      this.showForm = !this.showForm;
+    },
+    home() {
+      this.$router.push('/');
+    },
   },
 };
 </script>
 
 <style>
+a {
+  color: black;
+  text-decoration-line: none;
+}
+span.login a {
+  padding: .5em 1em;
+  background-color: #f90;
+  border-radius: 30px;
+}
 div#toolseek h2 {
   font-family: 'Pacifico', cursive;
 }
@@ -26,6 +55,7 @@ div#toolseek span.login {
 }
 div#toolseek {
   display: flex;
+  top: 0;
   justify-content: space-between;
   position: absolute;
   width: 100%;
@@ -37,5 +67,8 @@ div#toolseek * {
 }
 span.useability * {
   margin: 0 .5em;
+}
+span.useability {
+  margin-right: 1em;
 }
 </style>
