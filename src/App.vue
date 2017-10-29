@@ -12,6 +12,7 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Courgette|Dosis|Pacifico');
 html, body, div#app {
   margin: 0;
   height: 100%;
