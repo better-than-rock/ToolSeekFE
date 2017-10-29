@@ -6,12 +6,9 @@
   <toolseek class="heading"></toolseek>
   <div class="inputarea">
     <h3>Rent tools effortlessly</h3>
-    <form @submit.prevent="showMap">
-      <input class="zip" type="text" placeholder="Zip Code">
+    <form class="find" @submit.prevent="showSearch">
+      <input v-model="zipcode" pattern="^\d{5}$" class="zip" type="text" placeholder="Zip Code" title="Zip Code">
     </form>
-  </div>
-  <div class="about">
-    <h2>Help build and grow your community with Tool Seek</h2>
   </div>
 </div>
 </template>
@@ -22,6 +19,8 @@ import vid2 from '@/assets/videos/2.mp4';
 import vid3 from '@/assets/videos/3.mp4';
 import vid4 from '@/assets/videos/4.mp4';
 import vid5 from '@/assets/videos/5.mp4';
+import photo1 from '@/assets/photos/1.jpg';
+import photo2 from '@/assets/photos/2.jpg';
 import toolseek from '@/components/ToolSeek';
 
 const videos = [vid1, vid2, vid3, vid4, vid5];
@@ -30,11 +29,16 @@ export default {
   name: 'home',
   components: { toolseek },
   data() {
-    return { video: videos[0] };
+    return {
+      photo1,
+      photo2,
+      video: videos[0],
+      zipcode: '',
+    };
   },
   methods: {
-    showMap(e) {
-      const zip = e.targe.value;
+    showMap() {
+      console.log(this.zipcode);
     },
     nextVideo() {
       this.video = videos[next];
@@ -55,9 +59,18 @@ div#home {
   flex-direction: column;
   justify-content: space-between;
 }
+form.find {
+  display: flex;
+  flex-direction: column;
+}
+div.section img {
+  height: 200px;
+}
 div.about {
   background-color: #f39;
   text-align: center;
+  display: flex;
+  flex-direction: row;
 }
 div.inputarea {
   height: 100%;
@@ -74,10 +87,11 @@ div.inputarea h3 {
   margin-left: 1em;
   font-size: 16pt;
 }
-input.zip::placeholder {
+input::placeholder {
   font-family: 'Dosis', sans-serif;
 }
-input.zip {
+input {
+  margin: .1em;
   outline: none;
   align-content: center;
   font-size: 24pt;
