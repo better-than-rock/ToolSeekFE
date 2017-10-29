@@ -10,6 +10,7 @@
     <img class="avatar" :src="owner.image">
     <h4>{{owner.name}}</h4>
   </div>
+  <p>{{(dist * 69).toFixed(2)}}mi away from you!</p>
 </div>
 </template>
 
@@ -18,7 +19,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'tool',
-  props: ['tool'],
+  props: ['tool', 'dist'],
   data() {
     return {
       rented: false,

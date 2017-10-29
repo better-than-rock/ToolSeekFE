@@ -1,10 +1,11 @@
 <template>
 <div id="mapview">
+  <input class="searchBar" type="text" v-model="filter" @input="filterData">
   <rent-form @hide="hide" :price="price" v-if="showForm"></rent-form>
   <div class="map">
   </div>
   <div class="toollist">
-    <tool @showRent="showRent" v-for="tool in tools" :key="tool.name" :tool="tool"></tool>
+    <tool @showRent="showRent" v-for="tool in filteredTools" :key="tool.name" :tool="tool" :dist="distanceFromZip(tool)"></tool>
   </div>
 </div>
 </template>
@@ -15,20 +16,77 @@ import RentForm from '@/components/RentForm';
 import hammer from '@/assets/photos/hammer.jpg';
 import harold from '@/assets/photos/harold.jpg';
 import stapler from '@/assets/photos/stapler.jpg';
+import handyman from '@/assets/photos/handyman.jpg';
+import tablesaw from '@/assets/photos/tablesaw.jpg';
+import lasercutter from '@/assets/photos/lasercutter.png';
+import asianCW from '@/assets/photos/asianCW.jpg';
 
+function distanceFromZip(a) {
+  const center = [30.5301939, -97.7124543];
+  const deltaX = a.location[0] - center[0];
+  const deltaY = a.location[1] - center[1];
+  return Math.sqrt((deltaX ** 2) + (deltaY ** 2));
+}
+let map;
 // eslint-disable-next-line
 window.loadMapScenario = () => {
   // eslint-disable-next-line
-  const map = new Microsoft.Maps.Map(document.querySelector('div.map'), {
+  map = new Microsoft.Maps.Map(document.querySelector('div.map'), {
     credentials: 'Aj-YAY9LaDRaxG24fSALiQJLNvGTN3hRoG33rJqxDlmz8nonZ4Z0PTV_-VgWxJQT',
     center: new Microsoft.Maps.Location(30.5301939, -97.7124543),
     mapTypeId: Microsoft.Maps.MapTypeId.aerial,
     zoom: 16,
   });
-  map.entities.push(new Microsoft.Maps.Pushpin(
+  /* map.entities.push(new Microsoft.Maps.Pushpin(
     new Microsoft.Maps.Location(30.530769, -97.711640), null));
   map.entities.push(new Microsoft.Maps.Pushpin(
-    new Microsoft.Maps.Location(30.530344, -97.713121), null));
+    new Microsoft.Maps.Location(30.530344, -97.713121), null)); */
+  const tools = [
+    {
+      name: 'Hammer',
+      rate: 5.0,
+      image: hammer,
+      owner: {
+        name: 'Harold',
+        image: harold,
+      },
+      location: [30.530603, -97.713604],
+    },
+    {
+      name: 'Stapler',
+      rate: 10.0,
+      image: stapler,
+      owner: {
+        name: 'Harold',
+        image: harold,
+      },
+      location: [30.540999, -97.703541],
+    },
+    {
+      name: 'Super Awesome Laser Cutter',
+      rate: 500.0,
+      image: lasercutter,
+      owner: {
+        name: 'Lyndon',
+        image: asianCW,
+      },
+      location: [30.535963, -97.708229],
+    },
+    {
+      name: 'Mega Sharp TableSaw',
+      rate: 350.0,
+      image: tablesaw,
+      owner: {
+        name: 'Cool Mom',
+        image: handyman,
+      },
+      location: [30.533172, -97.715256],
+    },
+  ];
+  tools.forEach((tool) => {
+    map.entities.push(new Microsoft.Maps.Pushpin(
+      new Microsoft.Maps.Location(...tool.location), null));
+  });
 };
 /* eslint no-undef: "off" */
 export default {
@@ -38,30 +96,55 @@ export default {
     RentForm,
   },
   data() {
+    const tools = [
+      {
+        name: 'Hammer',
+        rate: 5.0,
+        image: hammer,
+        owner: {
+          name: 'Harold',
+          image: harold,
+        },
+        location: [30.530603, -97.713604],
+      },
+      {
+        name: 'Stapler',
+        rate: 10.0,
+        image: stapler,
+        owner: {
+          name: 'Harold',
+          image: harold,
+        },
+        location: [30.540999, -97.703541],
+      },
+      {
+        name: 'Super Awesome Laser Cutter',
+        rate: 500.0,
+        image: lasercutter,
+        owner: {
+          name: 'Lyndon',
+          image: asianCW,
+        },
+        location: [30.535963, -97.708229],
+      },
+      {
+        name: 'Mega Sharp TableSaw',
+        rate: 350.0,
+        image: tablesaw,
+        owner: {
+          name: 'Cool Mom',
+          image: handyman,
+        },
+        location: [30.533172, -97.715256],
+      },
+    ];
     return {
+      filter: '',
       showForm: false,
       rented: false,
       price: 0,
-      tools: [
-        {
-          name: 'Hammer',
-          rate: 5.0,
-          image: hammer,
-          owner: {
-            name: 'Harold',
-            image: harold,
-          },
-        },
-        {
-          name: 'Stapler',
-          rate: 10.0,
-          image: stapler,
-          owner: {
-            name: 'Harold',
-            image: harold,
-          },
-        },
-      ],
+      tools,
+      filteredTools: Array.from(tools),
     };
   },
   mounted() {
@@ -70,8 +153,15 @@ export default {
     bingApi.setAttribute('async', '');
     bingApi.setAttribute('defer', '');
     document.querySelector('body').appendChild(bingApi);
+    this.filteredTools.sort((a, b) => distanceFromZip(a) - distanceFromZip(b));
   },
   methods: {
+    distanceFromZip(a) {
+      const center = [30.5301939, -97.7124543];
+      const deltaX = a.location[0] - center[0];
+      const deltaY = a.location[1] - center[1];
+      return Math.sqrt((deltaX ** 2) + (deltaY ** 2));
+    },
     showRent(name, price) {
       this.price = price;
       this.showForm = !this.showForm;
@@ -79,6 +169,13 @@ export default {
     hide() {
       this.showForm = false;
       this.rented = true;
+    },
+    filterData() {
+      console.log(this.filteredTools);
+      this.filteredTools.splice(0, this.filteredTools.length);
+      this.tools.filter(tool => tool.name.match(new RegExp(this.filter, 'i')))
+        .forEach(tool => this.filteredTools.push(tool));
+      this.filteredTools.sort((a, b) => distanceFromZip(a) - distanceFromZip(b));
     },
   },
 };
@@ -92,7 +189,8 @@ div.map {
   width: 500px;
   height: 400px;
   float: right;
-  margin-right: 5em;
+  margin-right: 12em;
+  margin-top: 2em;
 }
 div.toollist {
   margin: 2em 4em;
@@ -100,5 +198,9 @@ div.toollist {
 div.tool {
   display: inline-flex;
   margin: 1em;
+}
+input.searchBar {
+  display: flex;
+  margin: 0 auto;
 }
 </style>
