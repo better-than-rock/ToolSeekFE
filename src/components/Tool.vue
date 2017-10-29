@@ -10,7 +10,10 @@
     <img class="avatar" :src="owner.image">
     <h4>{{owner.name}}</h4>
   </div>
-  <p>{{(dist * 69).toFixed(2)}}mi away from you!</p>
+  <div class="distrate">
+    <p>{{(dist * 69).toFixed(2)}}mi away from you!</p>
+    <p>Rating: {{'⭐'.repeat(owner.rating)}}</p>
+  </div>
 </div>
 </template>
 
