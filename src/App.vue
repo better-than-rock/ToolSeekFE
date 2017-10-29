@@ -1,13 +1,21 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
+    <tool-seek class="heading"></tool-seek>
     <router-view/>
   </div>
 </template>
 
 <script>
+import ToolSeek from '@/components/ToolSeek';
+
+require('font-awesome/css/font-awesome.min.css');
+
 export default {
   name: 'app',
+  components: {
+    ToolSeek,
+  },
 };
 </script>
 

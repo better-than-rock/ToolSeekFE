@@ -3,10 +3,9 @@
   <div class="videoloop">
     <video :src="video" @ended="nextVideo" muted autoplay class="background-loop"/>
   </div>
-  <toolseek class="heading"></toolseek>
   <div class="inputarea">
     <h3>Rent tools effortlessly</h3>
-    <form class="find" @submit.prevent="showSearch">
+    <form class="find" @submit.prevent="showMap">
       <input v-model="zipcode" pattern="^\d{5}$" class="zip" type="text" placeholder="Zip Code" title="Zip Code">
     </form>
   </div>
@@ -21,13 +20,11 @@ import vid4 from '@/assets/videos/4.mp4';
 import vid5 from '@/assets/videos/5.mp4';
 import photo1 from '@/assets/photos/1.jpg';
 import photo2 from '@/assets/photos/2.jpg';
-import toolseek from '@/components/ToolSeek';
 
 const videos = [vid1, vid2, vid3, vid4, vid5];
 let next = 1;
 export default {
   name: 'home',
-  components: { toolseek },
   data() {
     return {
       photo1,
@@ -38,6 +35,8 @@ export default {
   },
   methods: {
     showMap() {
+      this.$store.dispatch('setZip', this.zipcode);
+      this.$router.push('show');
       console.log(this.zipcode);
     },
     nextVideo() {
