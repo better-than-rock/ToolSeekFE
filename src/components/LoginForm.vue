@@ -1,13 +1,13 @@
 <template>
   <div class="form">
-    <form v-if="register" class="register-form">
+    <form @submit.prevent v-if="register" class="register-form">
       <input v-model="username" type="text" placeholder="name"/>
       <input v-model="password" type="password" placeholder="password"/>
       <input type="text" placeholder="email address"/>
       <button @click.prevent="register">create</button>
       <p class="message">Already registered? <a @click="toggle" href="#">Sign In</a></p>
     </form>
-    <form v-else class="login-form">
+    <form @submit.prevent v-else class="login-form">
       <input v-model="username" type="text" placeholder="username"/>
       <input v-model="password" type="password" placeholder="password"/>
       <button @click.prevent="login">login</button>
@@ -41,7 +41,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 form.login-form,
 form.register-form {
   flex-direction: column;

@@ -1,15 +1,17 @@
 <template>
 <div id="mapview">
+  <rent-form @hide="hide" :price="price" v-if="showForm"></rent-form>
   <div class="map">
   </div>
   <div class="toollist">
-    <tool v-for="tool in tools" :key="tool.name" :tool="tool"></tool>
+    <tool @showRent="showRent" v-for="tool in tools" :key="tool.name" :tool="tool"></tool>
   </div>
 </div>
 </template>
 
 <script>
 import Tool from '@/components/Tool';
+import RentForm from '@/components/RentForm';
 import hammer from '@/assets/photos/hammer.jpg';
 import harold from '@/assets/photos/harold.jpg';
 import stapler from '@/assets/photos/stapler.jpg';
@@ -33,9 +35,13 @@ export default {
   name: 'mapview',
   components: {
     Tool,
+    RentForm,
   },
   data() {
     return {
+      showForm: false,
+      rented: false,
+      price: 0,
       tools: [
         {
           name: 'Hammer',
@@ -65,6 +71,16 @@ export default {
     bingApi.setAttribute('defer', '');
     document.querySelector('body').appendChild(bingApi);
   },
+  methods: {
+    showRent(name, price) {
+      this.price = price;
+      this.showForm = !this.showForm;
+    },
+    hide() {
+      this.showForm = false;
+      this.rented = true;
+    },
+  },
 };
 </script>
 
@@ -82,6 +98,7 @@ div.toollist {
   margin: 2em 4em;
 }
 div.tool {
+  display: inline-flex;
   margin: 1em;
 }
 </style>

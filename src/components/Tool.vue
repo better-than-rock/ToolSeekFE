@@ -1,10 +1,10 @@
 <template>
-<div class="tool">
+<div class="tool" :class="{rented, unrented: !rented}" >
   <img :src="image">
   <div class="info">
     <h2>{{name}}</h2>
     <p>${{rate}} per day</p>
-    <a class="rent" href="#">Rent</a>
+    <a @click="rent" class="rent" href="#">Rent</a>
   </div>
   <div class="owner">
     <img class="avatar" :src="owner.image">
@@ -14,16 +14,30 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'tool',
   props: ['tool'],
   data() {
     return {
+      rented: false,
       name: this.tool.name,
       rate: this.tool.rate,
       image: this.tool.image,
       owner: this.tool.owner,
     };
+  },
+  computed: {
+    ...mapGetters(['loginToken']),
+  },
+  methods: {
+    rent() {
+      if (this.loginToken) {
+        this.$emit('showRent', this.name, this.rate);
+        this.rented = !this.rented;
+      }
+    },
   },
 };
 </script>
@@ -37,10 +51,6 @@ a.rent {
   color: black;
   text-decoration-line: none;
 }
-div.tool {
-  border: 1px solid black;
-  display: inline-flex;
-}
 div.tool img {
   height: 150px;
 }
@@ -52,5 +62,11 @@ div.owner h4 {
 }
 div.tool > * {
   margin: 0 2em;
+}
+div.tool.rented {
+  border: 1px solid red;
+}
+div.tool.unrented {
+  border: 1px solid black;
 }
 </style>

@@ -37,7 +37,6 @@ export default {
     showMap() {
       this.$store.dispatch('setZip', this.zipcode);
       this.$router.push('show');
-      console.log(this.zipcode);
     },
     nextVideo() {
       this.video = videos[next];
@@ -89,7 +88,7 @@ div.inputarea h3 {
 input::placeholder {
   font-family: 'Dosis', sans-serif;
 }
-input {
+input[type="text"] {
   margin: .1em;
   outline: none;
   align-content: center;
